@@ -1,0 +1,32 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Name }}-config
+  namespace: {{ .Namespace }}
+data:
+  elasticsearch.yml: |
+      network.host: 0.0.0.0
+      {{ if .Spec.Security.User.SecretName }}
+      xpack.security.enabled: true
+      xpack.security.transport.ssl.enabled: true
+      xpack.security.transport.ssl.verification_mode: certificate
+      xpack.security.transport.ssl.keystore.path: storage.p12
+      xpack.security.transport.ssl.keystore.password: stackinsights
+      xpack.security.transport.ssl.truststore.path: storage.p12
+      xpack.security.transport.ssl.truststore.password: stackinsights
+      {{end}}
+      {{ if .Spec.Security.TLS }}
+      xpack.security.http.ssl.enabled: true
+      xpack.security.http.ssl.verification_mode: certificate
+      xpack.security.http.ssl.keystore.path: storage.p12
+      xpack.security.http.ssl.keystore.password: stackinsights
+      xpack.security.http.ssl.truststore.path: storage.p12
+      xpack.security.http.ssl.truststore.password: stackinsights
+      {{end}}
+
+

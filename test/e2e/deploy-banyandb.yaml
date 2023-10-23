@@ -1,0 +1,52 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: BanyanDB
+metadata:
+  name: banyandb-test
+spec:
+  version: 1.0.0
+  counts: 1
+  image: apache/stackinsights-banyandb:latest
+  config:
+    - "standalone"
+    - "--measure-root-path=/data/banyandb"
+    - "--metadata-root-path=/data/banyandb"
+  storages:
+    - name: banyandb-volume
+      path: "/data/banyandb"
+      persistentVolumeClaimSpec:
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: storage
+            operator: In
+            values:
+            - banyandb
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: banyandb-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  hostPath:
+    path: "/tmp/banyandb/data1"

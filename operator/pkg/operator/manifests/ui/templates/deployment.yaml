@@ -1,0 +1,68 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Name }}-ui
+  namespace: {{ .Namespace }}
+  labels:
+    app: ui
+    operator.stackinsights.apache.org/ui-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: ui
+    operator.stackinsights.apache.org/component: deployment
+spec:
+  replicas: {{ .Spec.Instances }}
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: ui
+      operator.stackinsights.apache.org/ui-name: {{ .Name }}
+  template:
+    metadata:
+      labels:
+        app: ui
+        operator.stackinsights.apache.org/ui-name: {{ .Name }}
+        operator.stackinsights.apache.org/application: ui
+        operator.stackinsights.apache.org/component: deployment
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: ui
+                    operator.stackinsights.apache.org/ui-name: {{ .Name }}
+      containers:
+      - name: ui
+        image: {{ .Spec.Image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: page
+        livenessProbe:
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+          periodSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
+          httpGet:
+            path: /
+            port: 8080
+        readinessProbe:
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+          periodSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
+          httpGet:
+            path: /
+            port: 8080
+        env:
+          - name: SW_OAP_ADDRESS
+            value: {{ .Spec.OAPServerAddress }}

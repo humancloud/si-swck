@@ -1,0 +1,15 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- contains . }}
+- key: {{ notEmpty .key }}
+  value: 
+    value: 0
+    isemptyvalue: true
+- key: {{ notEmpty .key }}
+  value: 
+    value: {{ gt .value.value 0 }} 
+    isemptyvalue: false
+{{- end }}

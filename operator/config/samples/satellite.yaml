@@ -1,0 +1,16 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: Satellite
+metadata:
+  name: default
+spec:
+  version: 0.4.0
+  instances: 1
+  image: apache/stackinsights-satellite:v0.4.0
+  service:
+    template:
+      type: ClusterIP

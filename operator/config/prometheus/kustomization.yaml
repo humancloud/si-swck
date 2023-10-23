@@ -1,0 +1,6 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+resources:
+- monitor.yaml

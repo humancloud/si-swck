@@ -1,0 +1,25 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: BanyanDB
+metadata:
+  name: banyandb-sample
+spec:
+  version: 1.0.9
+  counts: 1
+  image: apache/stackinsights-banyandb:latest
+  config:
+    - "standalone"
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: storage
+                operator: In
+                values:
+                  - banyandb

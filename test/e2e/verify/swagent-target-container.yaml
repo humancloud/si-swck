@@ -1,0 +1,15 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- contains .}}
+env:
+  - name: JAVA_TOOL_OPTIONS
+    value: -javaagent:/sky/agent/stackinsights-agent.jar
+  - name: SW_LOGGING_LEVEL
+    value: "DEBUG"
+volumeMounts:
+  - mountPath: /sky/agent
+    name: sky-agent-test-002
+{{- end}}

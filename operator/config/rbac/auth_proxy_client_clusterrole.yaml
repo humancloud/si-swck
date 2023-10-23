@@ -1,0 +1,13 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metrics-reader
+rules:
+- nonResourceURLs:
+  - "/metrics"
+  verbs:
+  - get

@@ -1,0 +1,19 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: Storage
+metadata:
+  name: sample
+spec:
+  type: elasticsearch
+  connectType: external
+  address: "http://es-out.default:9200"  #please use your elasticsearch cluster's address
+  resource:
+    limit: "200m"
+    requests: "100m"
+  security:
+    user:
+      secretName: default

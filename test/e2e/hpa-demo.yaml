@@ -1,0 +1,30 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-demo
+  namespace: stackinsights-system
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: demo
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: External
+    external:
+      metric:
+        name: stackinsights.apache.org|service_cpm
+        selector:
+          matchLabels:
+            "service.str.0": "Your"
+            "service.byte.1": "5f"
+            "service.str.2": "ApplicationName"
+      target:
+        type: Value
+        value: 5

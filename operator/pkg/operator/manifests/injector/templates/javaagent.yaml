@@ -1,0 +1,26 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- $configuration := config }}
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: JavaAgent
+metadata:
+  name: {{SelectorName}}-javaagent
+  namespace: {{Namespace}}
+  ownerReferences:
+  - apiVersion: {{ownerReference.APIVersion}}
+    blockOwnerDeletion: {{ownerReference.BlockOwnerDeletion}}
+    controller: {{ownerReference.Controller}}
+    kind: {{ownerReference.Kind}}
+    name: {{ownerReference.Name}}
+    uid: {{ownerReference.UID}}
+spec:
+  podSelector: {{PodSelector}}
+  serviceName: {{ServiceName}}
+  backendService: {{BackendService}}
+  agentConfiguration: 
+  {{ range $key, $value := $configuration }}
+    {{$key}}: {{$value}}
+  {{- end -}}

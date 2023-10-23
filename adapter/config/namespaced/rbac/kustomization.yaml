@@ -1,0 +1,11 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+resources:
+- apiserver_auth_delegator_cluster_role_binding.yaml
+- apiserver_resource_reader_cluster_role_binding.yaml.yaml
+- custom_metrics_cluster_role.yaml
+- custom_metrics_resource_reader_cluster_role.yaml
+- hpa_custom_metrics_cluster_role_binding.yaml

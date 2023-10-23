@@ -1,0 +1,39 @@
+#
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+header: # `header` section is configurations for source codes license header.
+  license:
+    spdx-id: Stackinsights # the spdx id of the license, it's convenient when your license is standard SPDX license.
+    copyright-owner: Humancloud Technologis # the copyright owner to replace the [owner] in the `spdx-id` template.
+
+  paths: # `paths` are the path list that will be checked (and fixed) by license-eye, default is ['**'].
+    - '**'
+
+  paths-ignore: # `paths-ignore` are the path list that will be ignored by license-eye.
+    - 'dist'
+    - 'licenses'
+    - '**/*.md'
+    - '**/testdata/**'
+    - '**/go.mod'
+    - '**/go.sum'
+    - 'LICENSE'
+    - 'NOTICE'
+    - '**/build/**'
+    - '**/*.bin'
+    - '**/*.json'
+    - '**/*_mock.go'
+    - '**/*_mock_test.go'
+    - '**/*.pb.go'
+    - '**/*.textproto'
+    - '**/*.pem'
+    - 'PROJECT'
+    - '**/*.out'
+    - '**/*.tpl'
+
+  comment: on-failure # on what condition license-eye will comment on the pull request, `on-failure`, `always`, `never`.
+
+dependency:
+  files:
+    - go.mod

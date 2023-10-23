@@ -1,0 +1,56 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+  namespace: stackinsights-system
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        swck-java-agent-injected: "true"
+        app: demo
+      annotations:
+        sidecar.stackinsights.apache.org/initcontainer.resources.limits: '{"memory": "100Mi","cpu": "100m"}'
+        sidecar.stackinsights.apache.org/initcontainer.resources.requests: '{"memory": "100Mi","cpu": "100m"}'
+        agent.stackinsights.apache.org/collector.backend_service: "oap-service:11800"
+        optional.stackinsights.apache.org: "webflux|cloud-gateway-2.1.x"
+        bootstrap.stackinsights.apache.org: "jdk-http|jdk-threading"
+    spec:
+      containers:
+      - name: demo1
+        imagePullPolicy: IfNotPresent
+        image: ghcr.io/apache/stackinsights-swck-spring-demo:v0.0.1
+        command: ["java"]
+        args: ["-jar","/app.jar"]
+        ports:
+          - containerPort: 8085
+        readinessProbe:
+          httpGet:
+            path: /hello
+            port: 8085
+          initialDelaySeconds: 3
+          periodSeconds: 3
+          failureThreshold: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+  namespace: stackinsights-system
+spec:
+  type: ClusterIP
+  ports:
+  - name: 8085-tcp
+    port: 8085
+    protocol: TCP
+    targetPort: 8085
+  selector:
+    app: demo

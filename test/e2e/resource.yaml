@@ -1,0 +1,48 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: songs-deployment
+  namespace: stackinsights-system
+  labels:
+    app: songs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: songs
+  template:
+    metadata:
+      labels:
+        swck-java-agent-injected: "true"
+        app: songs
+      annotations:
+        agent.stackinsights.apache.org/agent.service_name: "agent::songs"
+        agent.stackinsights.apache.org/collector.backend_service: "oap-service:11800"
+        agent.stackinsights.apache.org/agent.instance_name: "songs"
+    spec:
+      containers:
+        - name: songs
+          image: ghcr.io/apache/stackinsights-showcase/songs-service:7c17079-agentless
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: songs
+  namespace: stackinsights-system
+spec:
+  selector:
+    app: songs
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

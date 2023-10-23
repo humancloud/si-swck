@@ -1,0 +1,52 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- $banyandb := .}}
+{{- range $storage := .Spec.Storages }}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $storage.Name }}-banyandb
+  namespace: {{ $banyandb.Namespace }}
+  labels:
+    app: banyandb
+    operator.stackinsights.apache.org/banyandb-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: banyandb
+    operator.stackinsights.apache.org/component: persistentVolumeClaim
+spec:
+  {{- $spec := $storage.PersistentVolumeClaimSpec }}
+
+  {{- if $spec.AccessModes }}
+  accessModes:
+    {{- range $spec.AccessModes }}
+    - {{ . }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $spec.Resources }}
+  resources:
+  {{- if $spec.Resources.Requests }}
+    requests:
+      {{- if $spec.Resources.Requests.Storage }}
+      storage: {{ $spec.Resources.Requests.Storage }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $spec.VolumeName }}
+  volumeName: {{ $spec.VolumeName }}
+  {{- end }}
+
+  {{- if $spec.StorageClassName }}
+  storageClassName: {{ $spec.StorageClassName }}
+  {{- end }}
+
+  {{- if $spec.VolumeMode }}
+  volumeMode: {{ $spec.VolumeMode }}
+  {{- end }}
+
+{{- end }}

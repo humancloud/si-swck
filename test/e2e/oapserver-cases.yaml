@@ -1,0 +1,15 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+cases:
+  # test oapserver
+  - query: swctl --display yaml --base-url=http://${service_default_oap_host}:${service_default_oap_12800}/graphql service ls
+    expected: verify/service.yaml
+  - query: swctl --display yaml --base-url=http://${service_default_oap_host}:${service_default_oap_12800}/graphql metrics linear --name service_cpm --service-name Your_ApplicationName | yq e 'to_entries' -
+    expected: verify/metrics.yaml
+  - query: swctl --display yaml --base-url=http://${service_default_oap_host}:${service_default_oap_12800}/graphql endpoint list --keyword=hello --service-name Your_ApplicationName
+    expected: verify/endpoint.yaml
+  - query: swctl --display yaml --base-url=http://${service_default_oap_host}:${service_default_oap_12800}/graphql metrics linear --name endpoint_cpm --endpoint-name GET:/hello --service-name Your_ApplicationName | yq e 'to_entries' -
+    expected: verify/metrics.yaml

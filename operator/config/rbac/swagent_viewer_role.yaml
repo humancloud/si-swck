@@ -1,0 +1,25 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+# permissions for end users to view swagents.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: swagent-viewer-role
+rules:
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents/status
+  verbs:
+  - get

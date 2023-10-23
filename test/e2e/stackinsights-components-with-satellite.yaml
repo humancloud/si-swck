@@ -1,0 +1,54 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: OAPServer
+metadata:
+  name: stackinsights-system
+  namespace: stackinsights-system
+spec:
+  version: 9.5.0
+  instances: 1
+  image: apache/stackinsights-oap-server:9.5.0
+  config:
+    - name: SW_METER_ANALYZER_ACTIVE_FILES
+      value: satellite
+  service:
+    template:
+      type: ClusterIP
+
+---
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: Satellite
+metadata:
+  name: stackinsights-system
+  namespace: stackinsights-system
+spec:
+  version: v0.4.0
+  instances: 1
+  image: ghcr.io/apache/stackinsights-satellite/stackinsights-satellite:v1987e1d566ac90f6b58a45fd9bfa27bf8faad635
+  config:
+    - name: SATELLITE_TELEMETRY_EXPORT_TYPE
+      value: metrics_service
+  service:
+    template:
+      type: ClusterIP
+
+---
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: UI 
+metadata:
+  name: stackinsights-system
+  namespace: stackinsights-system
+spec:
+  version: 9.5.0
+  instances: 1
+  image: apache/stackinsights-ui:9.5.0
+  OAPServerAddress: http://stackinsights-system-oap.stackinsights-system:12800
+  service:
+    template:
+      type: ClusterIP
+    ingress:
+      host: demo.ui.stackinsights

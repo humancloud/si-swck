@@ -1,0 +1,12 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- contains .}}
+- image: apache/stackinsights-java-agent:8.16.0-java8
+  name: swagent-002
+  volumeMounts:
+    - montPath: /sky/agent
+      name: sky-agent-test-002
+{{- end}}
