@@ -1,0 +1,42 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es
+  labels:
+    k8s-app: es
+spec:
+  replicas: 1
+  serviceName: es
+  selector:
+    matchLabels:
+      k8s-app: es
+  template:
+    metadata:
+      labels:
+        k8s-app: es
+    spec:
+      containers:
+      - name: es
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+        env:
+        - name: discovery.type
+          value: single-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-out
+  labels:
+    k8s-app: es
+spec:
+  selector:
+    k8s-app: es
+  ports:
+  - name: out
+    port: 9200
+    protocol: TCP

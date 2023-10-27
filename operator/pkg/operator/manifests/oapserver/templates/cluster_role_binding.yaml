@@ -1,0 +1,20 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: swck:oapserver
+  labels:
+    operator.stackinsights.apache.org/application: oapserver
+    operator.stackinsights.apache.org/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: swck:oapserver
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Name }}-oap
+    namespace: {{ .Namespace }}

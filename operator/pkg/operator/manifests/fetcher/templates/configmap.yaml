@@ -1,0 +1,76 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+{{ $types := .Spec.GetType }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Name }}-fetcher
+  namespace: {{ .Namespace }}
+  labels:
+    app: fetcher
+    operator.stackinsights.apache.org/fetcher-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: fetcher
+    operator.stackinsights.apache.org/component: configmap
+data:
+  collector.yaml: |-
+    service:
+      extensions: [zpages, health_check]
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          exporters: [logging, opencensus, prometheus]
+    extensions:
+      zpages:
+        endpoint: "localhost:56888"
+      health_check: {}
+    exporters:
+      logging:
+      prometheus:
+        endpoint: "0.0.0.0:9090"
+      opencensus:
+        endpoint: {{ .Spec.OAPServerAddress | quote }}
+        insecure: true
+    receivers:
+      {{- if has "prometheus" $types }}
+      prometheus:
+        config:
+          global:
+            scrape_interval: 15s
+            scrape_timeout: 10s
+          scrape_configs:
+          - job_name: kubernetes-pods
+            kubernetes_sd_configs:
+            - role: pod
+            relabel_configs:
+            - source_labels: []
+              target_label: cluster
+              replacement: {{ .Spec.ClusterName | quote }}
+            - action: keep
+              regex: true
+              source_labels:
+              - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+            - action: replace
+              regex: (.+)
+              source_labels:
+              - __meta_kubernetes_pod_annotation_prometheus_io_path
+              target_label: __metrics_path__
+            - action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $$1:$$2
+              source_labels:
+              - __address__
+              - __meta_kubernetes_pod_annotation_prometheus_io_port
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - action: replace
+              source_labels:
+              - __meta_kubernetes_namespace
+              target_label: kubernetes_namespace
+            - action: replace
+              source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: kubernetes_pod_name
+      {{- end }}

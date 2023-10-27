@@ -1,0 +1,30 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-demo
+  namespace: stackinsights-system
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stackinsights-system-satellite
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: External
+    external:
+      metric:
+        name: stackinsights.apache.org|satellite_service_grpc_connect_count
+        selector:
+          matchLabels:
+            "service.str.3": "satellite"
+            "service.byte.4": "2d"
+            "service.str.5": "service"
+      target:
+        type: Value
+        value: 2

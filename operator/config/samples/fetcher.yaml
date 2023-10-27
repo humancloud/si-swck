@@ -1,0 +1,45 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: Fetcher
+metadata:
+  name: istio-prod-cluster
+spec:
+  type: ["prometheus"]
+  OAPServerAddress: "default-oap:11800"
+  clusterName: "istio-prod-cluster"
+
+---
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: OAPServer
+metadata:
+  name: default
+spec:
+  version: 9.5.0
+  instances: 1
+  image: apache/stackinsights-oap-server:9.5.0
+  config:
+    - name: SW_OTEL_RECEIVER
+      value: default
+  service:
+    template:
+      type: ClusterIP
+
+---
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: UI
+metadata:
+  name: default
+spec:
+  version: 9.5.0
+  instances: 1
+  image: apache/stackinsights-ui:9.5.0
+  OAPServerAddress: default-oap:12800
+  service:
+    template:
+      type: ClusterIP
+    ingress:
+      host: demo.ui.stackinsights

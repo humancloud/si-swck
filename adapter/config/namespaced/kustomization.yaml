@@ -1,0 +1,13 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+# Adds namespace to all resources.
+# If you update the namespace, ../apiserver_auth_reader_role_binding_patch.yaml should be changed correspondingly.
+namespace: stackinsights-custom-metrics-system
+
+resources:
+- rbac
+- adapter
+- apiservice

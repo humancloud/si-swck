@@ -1,0 +1,28 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+# permissions for end users to edit oapserverdynamicconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: oapserverdynamicconfig-editor-role
+rules:
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverdynamicconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverdynamicconfigs/status
+  verbs:
+  - get

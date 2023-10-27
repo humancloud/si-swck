@@ -1,0 +1,27 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  {{ .Spec.ServiceName }}
+  namespace: {{ .Namespace }}
+  labels:
+    app: es
+    operator.stackinsights.apache.org/es-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: elasticsearch
+    operator.stackinsights.apache.org/component: service
+spec:
+  clusterIP: None
+  selector:
+    app: es
+    operator.stackinsights.apache.org/es-name: {{ .Name }}
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: 9200
+    - name: transport
+      port: 9300
+

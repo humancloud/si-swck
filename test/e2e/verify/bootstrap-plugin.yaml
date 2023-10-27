@@ -1,0 +1,9 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- contains . }}
+- key: {{ ge .key 0 }}
+  value: {{ notEmpty .value }}
+{{- end }}

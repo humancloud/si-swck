@@ -1,0 +1,29 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+# permissions for end users to edit swagents.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: swagent-editor-role
+rules:
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents/status
+  verbs:
+  - get

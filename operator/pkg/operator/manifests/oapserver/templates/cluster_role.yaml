@@ -1,0 +1,19 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: swck:oapserver
+  labels:
+    operator.stackinsights.apache.org/application: oapserver
+    operator.stackinsights.apache.org/component: rbac
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "endpoints", "services", "configmaps"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["extensions"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "watch", "list"]

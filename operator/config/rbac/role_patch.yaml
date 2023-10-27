@@ -1,0 +1,16 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+- op: add
+  path: /rules/0
+  value:
+    apiGroups:
+    - certificates.k8s.io
+    resources:
+    - signers
+    resourceNames:
+    - kubernetes.io/*
+    verbs:
+    - approve

@@ -1,0 +1,24 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: SwAgent
+metadata:
+  name: swagent-sample
+spec:
+  containerMatcher: ''
+  selector:
+  javaSidecar:
+    name: swagent-sample
+    image: apache/stackinsights-java-agent:8.16.0-java8
+    env:
+      - name: "SW_LOGGING_LEVEL"
+        value: "DEBUG"
+      - name: "SW_AGENT_COLLECTOR_BACKEND_SERVICES"
+        value: "stackinsights-system-oap.stackinsights-system.svc:11800"
+  sharedVolumeName: "sky-agent-test-001"
+  optionalPlugins:
+    - "webflux"
+    - "cloud-gateway-2.1.x"

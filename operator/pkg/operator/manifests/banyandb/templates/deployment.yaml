@@ -1,0 +1,106 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Name }}-banyandb
+  namespace: {{ .Namespace }}
+  labels:
+    app: banyandb
+    operator.stackinsights.apache.org/banyandb-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: banyandb
+    operator.stackinsights.apache.org/component: deployment
+spec:
+  replicas: {{ .Spec.Counts }}
+  selector:
+    matchLabels:
+      app: banyandb
+      operator.stackinsights.apache.org/banyandb-name: {{ .Name }}
+  template:
+    metadata:
+      labels:
+        app: banyandb
+        operator.stackinsights.apache.org/banyandb-name: {{ .Name }}
+        operator.stackinsights.apache.org/application: banyandb
+        operator.stackinsights.apache.org/component: pod
+    spec:
+      serviceAccountName: {{ .Name }}-banyandb
+
+      {{- if .Spec.Storages }}
+      volumes:
+        {{- range $storage := .Spec.Storages }}
+        - name: {{ $storage.Name }}
+          persistentVolumeClaim:
+            claimName: {{ $storage.Name }}-banyandb
+        {{- end }}
+      {{- end}}
+      containers:
+        - name: banyandb-container
+          image: {{ .Spec.Image }}
+          imagePullPolicy: IfNotPresent
+          args:
+            {{- range $value := .Spec.Config }}
+            - {{ $value }}
+            {{- end }}
+          ports:
+            - containerPort: 17912
+              name: grpc
+            - containerPort: 17913
+              name: http
+            - containerPort: 2121
+              name: observability
+            - containerPort: 6060
+              name: pprof
+
+          {{- if .Spec.Storages }}
+          volumeMounts:
+            {{- range $storage := .Spec.Storages }}
+            - mountPath: {{ $storage.Path }}
+              name: {{ $storage.Name }}
+            {{- end }}
+          {{- end }}
+
+      {{- if .Spec.Affinity }}
+      {{- $affinity := .Spec.Affinity }}
+      affinity:
+        {{- if $affinity.NodeAffinity }}
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            {{- range $requirement := $affinity.NodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution.NodeSelectorTerms}}
+              {{- range $matchExpression := $requirement.MatchExpressions }}
+                - matchExpressions:
+                    - key: {{ $matchExpression.Key }}
+                      operator: {{ $matchExpression.Operator }}
+                      values:
+                        {{- range $v := $matchExpression.Values }}
+                        - {{ $v }}
+                        {{- end}}
+              {{- end}}
+            {{- end}}
+        {{- end}}
+
+        {{- if $affinity.PodAffinity }}
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            {{- range $term := $affinity.PodAffinity.RequiredDuringSchedulingIgnoredDuringExecution }}
+            - topologyKey: {{ $term.TopologyKey }}
+              namespaces:
+                {{- range $ns := $term.Namespaces }}
+                - {{ $ns }}
+                {{- end }}
+              labelSelector:
+                MatchLabels:
+                {{- range $key, $value := $term.LabelSelector.MatchLabels }}
+                  {{ $key }} : {{ $value }}
+                {{- end}}
+            {{- end}}
+
+        {{- end}}
+      {{- end}}
+
+
+

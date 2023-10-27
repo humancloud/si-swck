@@ -1,0 +1,28 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+# permissions for end users to edit uis.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ui-editor-role
+rules:
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - uis
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - uis/status
+  verbs:
+  - get

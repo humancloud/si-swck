@@ -1,0 +1,48 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Name }}-fetcher
+  namespace: {{ .Namespace }}
+  labels:
+    app: fetcher
+    operator.stackinsights.apache.org/fetcher-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: fetcher
+    operator.stackinsights.apache.org/component: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fetcher
+      operator.stackinsights.apache.org/fetcher-name: {{ .Name }}
+  template:
+    metadata:
+      labels:
+        app: fetcher
+        operator.stackinsights.apache.org/fetcher-name: {{ .Name }}
+        operator.stackinsights.apache.org/application: fetcher
+        operator.stackinsights.apache.org/component: pod
+    spec:
+      serviceAccountName: {{ .Name }}-fetcher
+      containers:
+        - args:
+            - --log-level=DEBUG
+            - --config=/conf/collector.yaml
+          image: otel/opentelemetry-collector:0.18.0
+          imagePullPolicy: IfNotPresent
+          name: otc-container
+          volumeMounts:
+            - mountPath: /conf
+              name: otc-internal
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: collector.yaml
+                path: collector.yaml
+            name: {{ .Name }}-fetcher
+          name: otc-internal

@@ -1,0 +1,13 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+resources:
+- adapter.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: metrics-adapter
+  newName: apache/stackinsights-swck
+  newTag: v0.8.0

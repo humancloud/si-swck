@@ -1,0 +1,21 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: OAPServer
+metadata:
+  name: minimal
+spec:
+  version: 9.1.0
+  instances: 1
+  
+---
+apiVersion: operator.stackinsights.apache.org/v1alpha1
+kind: UI 
+metadata:
+  name: minimal
+spec:
+  version: 9.1.0
+  instances: 1

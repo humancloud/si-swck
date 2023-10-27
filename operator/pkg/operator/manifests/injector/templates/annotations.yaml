@@ -1,0 +1,79 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+# name means the reference to configuration used in pod's annotations.
+# defaultValue is the default value in agent.config
+# vaildateFunc means use which function to validate the value
+# Notice , the vaildateFunc must exist in validate.go , 
+# if don't have the vaildateFunc , please set nil
+# envName is the environment variable in agent.config
+
+annotations:
+  # Next is the annotation of the sidecar configuration
+  - name: sidecar.stackinsights.apache.org/initcontainer.Name
+    defaultValue: inject-stackinsights-agent
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/initcontainer.Image
+    defaultValue: apache/stackinsights-java-agent:8.16.0-java8
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/initcontainer.Command
+    defaultValue: sh
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/initcontainer.args.Option
+    defaultValue: -c
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/initcontainer.args.Command
+    defaultValue: "mkdir -p /sky/agent && cp -r /stackinsights/agent/* /sky/agent"
+    validateFunc: nil
+    envName: nil
+  
+  - name: sidecar.stackinsights.apache.org/initcontainer.resources.limits
+    defaultValue: nil
+    validateFunc: ValidateResourceRequirements
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/initcontainer.resources.requests
+    defaultValue: nil
+    validateFunc: ValidateResourceRequirements
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/sidecarVolume.Name
+    defaultValue: sky-agent
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/sidecarVolumeMount.MountPath
+    defaultValue: /sky/agent
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/env.Name
+    defaultValue: JAVA_TOOL_OPTIONS
+    validateFunc: nil
+    envName: nil
+
+  - name: sidecar.stackinsights.apache.org/env.Value
+    defaultValue: -javaagent:/sky/agent/stackinsights-agent.jar
+    validateFunc: nil
+    envName: nil
+
+  # Next is the annotation of the java agent configuration
+  - name: agent.stackinsights.apache.org/agent.service_name
+    defaultValue: Your_ApplicationName
+    validateFunc: ValidateServiceName
+    envName: SW_AGENT_NAME
+
+  - name: agent.stackinsights.apache.org/collector.backend_service
+    defaultValue: 127.0.0.1:11800
+    validateFunc: ValidateBackendServices
+    envName: SW_AGENT_COLLECTOR_BACKEND_SERVICES

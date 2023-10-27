@@ -1,0 +1,11 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+cases:
+  # test ui
+  - query: swctl --display yaml --base-url=http://${service_stackinsights_system_ui_host}:${service_stackinsights_system_ui_80}/graphql service ls
+    expected: verify/service.yaml
+  - query: swctl --display yaml --base-url=http://${service_stackinsights_system_ui_host}:${service_stackinsights_system_ui_80}/graphql endpoint list --keyword=hello --service-name Your_ApplicationName
+    expected: verify/endpoint.yaml

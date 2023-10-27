@@ -1,0 +1,41 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+ 
+{{- $ingress := .Spec.Service.Ingress }}
+{{ if $ingress.Host }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Name }}-ui
+  namespace: {{ .Namespace }}
+  labels:
+    app: ui
+    operator.stackinsights.apache.org/ui-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: ui
+    operator.stackinsights.apache.org/component: deployment
+  annotations:
+    {{- range $key, $value := $ingress.Annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    - host: {{ $ingress.Host }}
+      http:
+        paths:
+        - backend:
+            service:
+              name: {{ .Name }}-ui
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  {{- if $ingress.IngressClassName }}
+  ingressClassName: {{ $ingress.IngressClassName }}
+  {{end}}
+  {{- if $ingress.TLS }}
+  tls:
+{{ toYAML $ingress.TLS | indent 4 }}
+  {{end}}
+{{end}}

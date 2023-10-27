@@ -1,0 +1,10 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+namePrefix: stackinsights-custom-metrics-
+
+resources:
+- namespaced
+- apiserver_auth_reader_role_binding.yaml

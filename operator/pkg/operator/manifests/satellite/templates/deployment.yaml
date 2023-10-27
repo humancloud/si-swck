@@ -1,0 +1,71 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Name }}-satellite
+  namespace: {{ .Namespace }}
+  labels:
+    app: satellite
+    operator.stackinsights.apache.org/satellite-server-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: satellite
+    operator.stackinsights.apache.org/component: deployment
+
+spec:
+  replicas: {{ .Spec.Instances }}
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: satellite
+      operator.stackinsights.apache.org/satellite-server-name: {{ .Name }}
+  template:
+    metadata:
+      labels:
+        app: satellite
+        operator.stackinsights.apache.org/satellite-server-name: {{ .Name }}
+        operator.stackinsights.apache.org/application: satellite
+        operator.stackinsights.apache.org/component: pod
+    spec:
+      serviceAccountName: {{ .Name }}-satellite
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: satellite
+                    operator.stackinsights.apache.org/satellite-server-name: {{ .Name }}
+      containers:
+        - name: satellite
+          image: {{ .Spec.Image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 11800
+              name: grpc
+            - containerPort: 1234
+              name: http-monitoring
+          readinessProbe:
+            tcpSocket:
+              port: 11800
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          env:
+            - name: SATELLITE_GRPC_CLIENT_FINDER
+              value: kubernetes
+            - name: SATELLITE_GRPC_CLIENT_KUBERNETES_NAMESPACE
+              value: "{{ .Namespace }}"
+            - name: SATELLITE_GRPC_CLIENT_KUBERNETES_KIND
+              value: pod
+            - name: SATELLITE_GRPC_CLIENT_KUBERNETES_SELECTOR_LABEL
+              value: "app=oap,operator.stackinsights.apache.org/oap-server-name={{ .Spec.OAPServerName }}"
+            - name: SATELLITE_GRPC_CLIENT_KUBERNETES_EXTRA_PORT
+              value: "11800"
+            {{range .Spec.Config}}
+            - name: {{ .Name }}
+              value: "{{ .Value }}"
+            {{end}}

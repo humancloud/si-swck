@@ -1,0 +1,134 @@
+domain: stackinsights.apache.org
+layout:
+- go.kubebuilder.io/v3
+multigroup: true
+projectName: stackinsights-swck
+repo: github.com/humancloud/si-swck/operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: OAPServer
+  path: github.com/humancloud/si-swck/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: UI
+  path: github.com/humancloud/si-swck/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: Fetcher
+  path: github.com/humancloud/si-swck/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: Storage
+  path: github.com/humancloud/si-swck/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: JavaAgent
+  path: github.com/humancloud/si-swck/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: Satellite
+  path: github.com/humancloud/si-swck/operator/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: SwAgent
+  path: github.com/humancloud/si-swck/operator/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: OAPServerConfig
+  path: github.com/humancloud/si-swck/operator/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: OAPServerDynamicConfig
+  path: github.com/humancloud/si-swck/operator/apis/operator/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: stackinsights.apache.org
+  group: operator
+  kind: BanyanDB
+  path: github.com/humancloud/si-swck/operator/apis/operator/v1alpha1
+  version: v1alpha1
+version: "3"

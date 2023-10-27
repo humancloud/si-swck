@@ -1,0 +1,16 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: swck:satellite
+  labels:
+    operator.stackinsights.apache.org/application: satellite
+    operator.stackinsights.apache.org/component: rbac
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "watch", "list"]

@@ -1,0 +1,44 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+{{- $svc := .Spec.Service.Template }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Name }}-oap
+  namespace: {{ .Namespace }}
+  labels:
+    app: oap
+    operator.stackinsights.apache.org/oap-server-name: {{ .Name }}
+    operator.stackinsights.apache.org/application: oapserver
+    operator.stackinsights.apache.org/component: service
+spec:
+  type: {{ $svc.Type }}
+  ports:
+  - port: 12800
+    name: rest
+  - port: 11800
+    name: grpc
+  - port: 1234
+    name: http-monitoring
+  {{- if $svc.ExternalIPs }}
+  externalIPs:
+    {{- range $value := $svc.ExternalIPs }}
+    - {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if $svc.LoadBalancerIP }}
+  loadBalancerIP: {{ $svc.LoadBalancerIP }}
+  {{- end }}
+  {{- if $svc.LoadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- range $value := $svc.LoadBalancerSourceRanges }}
+    - {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  selector:
+    app: oap
+    operator.stackinsights.apache.org/oap-server-name: {{ .Name }}
+

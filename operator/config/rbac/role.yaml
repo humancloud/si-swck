@@ -1,0 +1,369 @@
+#
+# Copyright (c) 2019 Stackinsights to present
+# All rights reserved
+#
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - persistentvolumeclaims
+  - serviceaccounts
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  - serviceaccounts
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests/approval
+  verbs:
+  - update
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - update
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - banyandbs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - banyandbs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - banyandbs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - fetchers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - fetchers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - javaagents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - javaagents/status
+  verbs:
+  - delete
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverdynamicconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapserverdynamicconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapservers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - oapservers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - satellites
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - satellites/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - satellites/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - storages
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - storages/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - swagents/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - uis
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - operator.stackinsights.apache.org
+  resources:
+  - uis/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - clusterroles
+  verbs:
+  - '*'
